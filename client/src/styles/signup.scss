@@ -1,3 +1,10 @@
+$desktop:840px;
+@mixin desktop {
+    @media (min-width:#{$desktop}) {
+        @content;
+    }
+}
+
 #main_signup {
     padding: 10px;
     background-color: white;
@@ -6,7 +13,12 @@
 }
 
 #signup-form {
-    width: 400px;
+
+    @include desktop {
+        width: 400px;
+    }
+
+    width:95%;
     margin: 0 auto;
     padding: 20px;
     padding-bottom: 50px;

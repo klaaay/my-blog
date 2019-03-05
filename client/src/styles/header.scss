@@ -1,3 +1,10 @@
+$desktop:840px;
+@mixin desktop {
+    @media (min-width:#{$desktop}) {
+        @content;
+    }
+}
+
 #topbar {
     height: 3.5rem;
     position: fixed;
@@ -6,12 +13,15 @@
     top: 0;
     display: flex;
     align-items: center;
-    margin-left: 5px;
     background-color: white;
     box-shadow: 0 0 1px rgba(67, 90, 111, .47), 0 2px 4px -2px rgba(67, 90, 111, .3);
     .topbar-icon {
         color: #38A065;
-        font-size: 1.8rem;
+        font-size: 1.2rem;
+        margin-left: 5px;
+        @include desktop {
+            font-size: 1.8rem;
+        }
     }
     .topbar-left {
         display: flex;

@@ -2,12 +2,16 @@ import React from "react";
 import { Formik } from "formik";
 import { Button, toaster } from "evergreen-ui";
 import * as yup from "yup";
-import FormField from "components/FormField";
 import axios from "axios";
 import apis from "message/apis.js";
 import formTips from "message/formTips.js";
 import getFormData from "utils/getFormData.js";
 import asyncToast from "utils/asyncToast.js";
+
+import FomikTextInputField from "components/FomikTextInputField.jsx";
+import FomikFileInputField from "components/FomikFileInputField.jsx";
+import FomikSelectInputField from "components/FomikSelectInputField.jsx";
+import FormikTextAreaInputField from "components/FormikTextAreaInputField.jsx";
 
 import "styles/signup.scss";
 
@@ -17,17 +21,13 @@ const {
   REQUIRED_FIELD,
   PASSWORD_LENGTH_LIMITED,
   UNSUPPORTED_TYPE,
-  BIO_LENGTH_LIMITED
+  BIO_LENGTH_LIMITED,
+  NAME_LEGTH_LIMITED
 } = formTips;
 
-const Signup = () => {
-  const SUPPORTED_FORMATS = [
-    "image/jpg",
-    "image/jpeg",
-    "image/gif",
-    "image/png"
-  ];
+const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/gif", "image/png"];
 
+const Signup = () => {
   return (
     <div id="main_signup">
       <div id="signup-form">
@@ -51,12 +51,17 @@ const Signup = () => {
               const res = await axios.post(SIGNUP, SignupInfo);
               console.log(res.data);
               asyncToast(res.data);
+              resetForm();
+              setSubmitting(false);
             } catch (error) {
               console.log(error);
             }
           }}
           validationSchema={yup.object().shape({
-            name: yup.string().required(REQUIRED_FIELD),
+            name: yup
+              .string()
+              .max(9, NAME_LEGTH_LIMITED)
+              .required(REQUIRED_FIELD),
             password: yup
               .string()
               .min(9, PASSWORD_LENGTH_LIMITED)
@@ -78,12 +83,12 @@ const Signup = () => {
             errors,
             touched,
             handleSubmit,
-            setFieldValue
+            setFieldValue,
+            isSubmitting
           }) => {
             return (
               <form onSubmit={handleSubmit}>
-                <FormField
-                  classify="textInput"
+                <FomikTextInputField
                   type="text"
                   name="name"
                   label="用户名"
@@ -91,8 +96,7 @@ const Signup = () => {
                   errors={errors}
                   placeholder="请输入用户名"
                 />
-                <FormField
-                  classify="textInput"
+                <FomikTextInputField
                   type="password"
                   name="password"
                   label="密码"
@@ -100,8 +104,7 @@ const Signup = () => {
                   errors={errors}
                   placeholder="请输入密码"
                 />
-                <FormField
-                  classify="textInput"
+                <FomikTextInputField
                   type="password"
                   name="repassword"
                   label="确认密码"
@@ -109,8 +112,7 @@ const Signup = () => {
                   errors={errors}
                   placeholder="请验证输入密码"
                 />
-                <FormField
-                  classify="selectInput"
+                <FomikSelectInputField
                   name="gender"
                   label="性别"
                   touched={touched}
@@ -122,29 +124,27 @@ const Signup = () => {
                     { value: "x", text: "不明" }
                   ]}
                 />
-                <FormField
-                  classify="fileInput"
+                <FomikFileInputField
                   name="avatar"
                   label="头像"
-                  touched={touched}
                   errors={errors}
+                  touched={touched}
                   placeholder="请选择上传的头像"
                   setFieldValue={setFieldValue}
                 />
-                <FormField
-                  classify="textareaInput"
+                <FormikTextAreaInputField
                   name="bio"
                   label="个人简介"
                   touched={touched}
                   errors={errors}
                   placeholder="请输入个人简介"
-                  setFieldValue={setFieldValue}
                 />
                 <Button
                   className="submit-btn"
                   type="submit"
                   appearance="primary"
                   intent="success"
+                  disabled={isSubmitting}
                 >
                   注册
                 </Button>
