@@ -1,0 +1,43 @@
+$desktop:840px;
+$mobile: 440px;
+@mixin desktop {
+    @media (min-width:#{$desktop}) {
+        @content;
+    }
+}
+
+@mixin mobile {
+    @media (max-width:#{$mobile}) {
+        @content;
+    }
+}
+
+#main_signin {
+    padding: 10px; // height: 80vh;
+    background-color: white;
+    position: relative;
+    top: 2px;
+    @include mobile {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 75vh;
+    }
+}
+
+#signin-form {
+    @include desktop {
+        width: 400px;
+    }
+    width:95%;
+    margin: 0 auto;
+    padding: 20px;
+    padding-bottom: 50px;
+    border: 1px solid darken($color: #F6F8FA, $amount: 5);
+    border-radius: 15px;
+    background-color: #F6F8FA;
+    .submit-btn {
+        margin-top: 5px;
+        float: right;
+    }
+}

@@ -1,13 +1,13 @@
-const { checkNotLogin } = require("../middlewares/check");
+// const { checkNotLogin } = require("../middlewares/check");
+const passportService = require("../services/usedPassport");
+const passport = require("passport");
+
+// const requireAuth = passport.authenticate("jwt", { session: false });
+const requireSignin = passport.authenticate("local", { session: false });
+
+const { signin } = require("../controllers/signin");
 
 module.exports = app => {
-  // GET /signin 登录页
-  app.get("/signin", checkNotLogin, function(req, res, next) {
-    return res.send("登录页");
-  });
-
   // POST /signin 用户登录
-  app.post("/signin", checkNotLogin, function(req, res, next) {
-    return res.send("登录");
-  });
+  app.post("/signin", requireSignin, signin);
 };

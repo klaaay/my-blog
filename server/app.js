@@ -8,7 +8,6 @@ const pkg = require("./package");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 
-
 mongoose
   .connect(config.mongodb, {
     useNewUrlParser: true
@@ -23,7 +22,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 // 设置静态文件目录
-app.use('/public', express.static('public'));
+app.use("/public", express.static("public"));
 
 // session 中间件
 app.use(
@@ -48,8 +47,9 @@ app.use(
 );
 
 // 路由
-require("./routes/signin")(app);
 require("./routes/signup")(app);
+require("./routes/signin")(app);
+require("./routes/signout")(app);
 require("./routes/posts")(app);
 require("./routes/comments")(app);
 

@@ -1,7 +1,7 @@
 export default values => {
-  let SignupInfo = new FormData();
+  let formInfo = new FormData();
   Object.keys(values).forEach(item => {
-    SignupInfo.append(item, values[item]);
+    formInfo.append(item, values[item]);
   });
-  return SignupInfo;
+  return formInfo;
 };

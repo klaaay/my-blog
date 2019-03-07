@@ -5,13 +5,14 @@ import { Provider } from "react-redux";
 import { createStore, applyMiddleware, compose } from "redux";
 import reduxThunk from "redux-thunk";
 
-import "styles/index.scss"
+import "styles/index.scss";
 
 import Todos from "pages/Todos";
 import About from "pages/About";
 import Head from "layouts/Head";
 import Footer from "layouts/Footer";
-import Signup from "pages/Signup.jsx";
+import Signup from "pages/Signup";
+import Signin from "pages/Signin";
 
 import reducers from "./reducers";
 
@@ -31,7 +32,7 @@ ReactDom.render(
         </header>
         <main>
           <Switch>
-            <Route exact path="/" component={Todos} />
+            <Route exact path="/" component={Signin} />
             <Route path="/signup" component={Signup} />
             <Route path="/about" component={About} />
           </Switch>
