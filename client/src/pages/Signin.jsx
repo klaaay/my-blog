@@ -1,12 +1,13 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { Formik } from "formik";
 import { Button } from "evergreen-ui";
 import * as yup from "yup";
 import axios from "axios";
 import apis from "message/apis.js";
 import formTips from "message/formTips.js";
-// import getFormData from "utils/getFormData.js";
 import asyncToast from "utils/asyncToast.js";
+
+import MyContext from "context/context";
 
 import "styles/signin.scss";
 
@@ -16,6 +17,12 @@ const { SIGNIN } = apis;
 const { REQUIRED_FIELD } = formTips;
 
 const Signin = () => {
+  const context = useContext(MyContext);
+
+  useEffect(() => {
+    console.log(context);
+  }, []);
+
   return (
     <div id="main_signin">
       <div id="signin-form">
@@ -30,6 +37,13 @@ const Signin = () => {
               const res = await axios.post(SIGNIN, values);
               console.log(res.data);
               asyncToast(res.data);
+              context.login({
+                token: res.data.token,
+                name: res.data.name,
+                avatar: res.data.avatar,
+                bio: res.data.bio,
+                gender: res.data.gender
+              });
               resetForm();
               setSubmitting(false);
             } catch (error) {

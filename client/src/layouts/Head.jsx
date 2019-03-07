@@ -12,7 +12,7 @@ const Head = props => {
       <nav className="topbar-left">
         <li className="topbar-left-item">
           <NavLink exact to="/" activeClassName="selected">
-            Todos
+            Signin
           </NavLink>
         </li>
         <li className="topbar-left-item">
