@@ -28,56 +28,65 @@ const {
 const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/gif", "image/png"];
 
 const Signup = () => {
+  const initialValues = {
+    name: "",
+    password: "",
+    repassword: "",
+    gender: "m",
+    avatar: null,
+    bio: ""
+  };
+
+  const submitHandler = async (
+    values,
+    { resetForm, setErrors, setSubmitting }
+  ) => {
+    console.log(values);
+    if (values.password !== values.repassword) {
+      toaster.warning(UNSAME_PASSWORD);
+      return;
+    }
+    let SignupInfo = getFormData(values);
+    try {
+      const res = await axios.post(SIGNUP, SignupInfo);
+      console.log(res.data);
+      asyncToast(res.data);
+      resetForm();
+      setSubmitting(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const validationSchema = yup.object().shape({
+    name: yup
+      .string()
+      .max(9, NAME_LEGTH_LIMITED)
+      .required(REQUIRED_FIELD),
+    password: yup
+      .string()
+      .min(9, PASSWORD_LENGTH_LIMITED)
+      .required(REQUIRED_FIELD),
+    repassword: yup.string().required(REQUIRED_FIELD),
+    gender: yup.string().required(REQUIRED_FIELD),
+    avatar: yup
+      .mixed()
+      .required(REQUIRED_FIELD)
+      .test(
+        "fileType",
+        UNSUPPORTED_TYPE,
+        value => value && SUPPORTED_FORMATS.includes(value.type)
+      ),
+    bio: yup.string().max(50, BIO_LENGTH_LIMITED)
+  });
+
   return (
     <div id="main_signup">
       <div id="signup-form">
         <Formik
-          initialValues={{
-            name: "",
-            password: "",
-            repassword: "",
-            gender: "m",
-            avatar: null,
-            bio: ""
-          }}
-          onSubmit={async (values, { resetForm, setErrors, setSubmitting }) => {
-            console.log(values);
-            if (values.password !== values.repassword) {
-              toaster.warning(UNSAME_PASSWORD);
-              return;
-            }
-            let SignupInfo = getFormData(values);
-            try {
-              const res = await axios.post(SIGNUP, SignupInfo);
-              console.log(res.data);
-              asyncToast(res.data);
-              resetForm();
-              setSubmitting(false);
-            } catch (error) {
-              console.log(error);
-            }
-          }}
-          validationSchema={yup.object().shape({
-            name: yup
-              .string()
-              .max(9, NAME_LEGTH_LIMITED)
-              .required(REQUIRED_FIELD),
-            password: yup
-              .string()
-              .min(9, PASSWORD_LENGTH_LIMITED)
-              .required(REQUIRED_FIELD),
-            repassword: yup.string().required(REQUIRED_FIELD),
-            gender: yup.string().required(REQUIRED_FIELD),
-            avatar: yup
-              .mixed()
-              .required(REQUIRED_FIELD)
-              .test(
-                "fileType",
-                UNSUPPORTED_TYPE,
-                value => value && SUPPORTED_FORMATS.includes(value.type)
-              ),
-            bio: yup.string().max(50, BIO_LENGTH_LIMITED)
-          })}
+          initialValues={initialValues}
+          onSubmit={submitHandler}
+          validationSchema={validationSchema}
           render={({
             values,
             errors,

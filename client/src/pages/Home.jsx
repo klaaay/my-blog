@@ -1,7 +1,15 @@
-import React, { Component } from "react";
+import React, { useContext, useEffect } from "react";
 
-export default class Home extends Component {
-  render() {
-    return <div>Home Page</div>;
-  }
-}
+import MyContext from "context/context";
+
+const Home = props => {
+  const context = useContext(MyContext);
+
+  useEffect(() => {
+    console.log(context);
+  });
+
+  return <div>Home Page{context.token ? "you are login" : ""}</div>;
+};
+
+export default Home;

@@ -14,7 +14,7 @@ const login = ({ name, token, avatar, bio, gender }, state) => {
   };
 };
 
-const logout = ({}, state) => {
+const logout = state => {
   console.log("Loging out");
   return {
     ...state,

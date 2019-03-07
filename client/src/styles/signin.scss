@@ -39,5 +39,16 @@ $mobile: 440px;
     .submit-btn {
         margin-top: 5px;
         float: right;
+        margin-right: 8px;
+    }
+    .vistor-btn {
+        float: right;
+        transform: translateY(6px);
+        color: #24A367;
+        font-size: 12px;
+        padding: 5px;
+        border: 2px solid lighten($color: #24A367, $amount: 5);
+        border-radius: 5px;
+        cursor: pointer;
     }
 }
