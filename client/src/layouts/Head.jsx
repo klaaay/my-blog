@@ -4,12 +4,19 @@ import { Popover, Position, Menu, Icon } from "evergreen-ui";
 import MyContext from "context/context";
 import "styles/header.scss";
 
+import setAuthorizationHeader from "utils/setAuthorizationHeader";
+import { useAuth } from "hooks/auth";
+
+
 const Head = props => {
+  setAuthorizationHeader(localStorage.getItem("token"));
   const context = useContext(MyContext);
 
+  useAuth();
+
   const signouthandler = () => {
-    console.log(props);
-    context.logout();
+    context.authAction.logout();
+    localStorage.removeItem("token");
     props.history.push("/");
   };
 
@@ -19,53 +26,48 @@ const Head = props => {
         My-Blog
       </NavLink>
       <nav className="topbar-left">
-        <li className="topbar-left-item">
-          <NavLink to="/home" activeClassName="selected">
-            Home
-          </NavLink>
-        </li>
-        {!context.token && (
+        {!context.auth.name && (
           <li className="topbar-left-item">
             <NavLink exact to="/" activeClassName="selected">
               Signin
             </NavLink>
           </li>
         )}
-        {!context.token && (
+        {!context.auth.name && (
           <li className="topbar-left-item">
             <NavLink to="/signup" activeClassName="selected">
               Signup
             </NavLink>
           </li>
         )}
+        <li className="topbar-left-item">
+          <NavLink to="/home" activeClassName="selected">
+            Home
+          </NavLink>
+        </li>
       </nav>
       <div className="topbar-divder" />
       <div className="topbar-right">
-        <Popover
-          position={Position.BOTTOM_LEFT}
-          content={
-            <Menu>
-              <Menu.Group>
-                <Menu.Item icon="people">登录</Menu.Item>
-              </Menu.Group>
-              <Menu.Group>
-                <Menu.Item icon="people">注册</Menu.Item>
-              </Menu.Group>
-              <Menu.Divider />
-              <Menu.Group>
-                <Menu.Item
-                  icon="trash"
-                  intent="danger"
-                  onSelect={signouthandler}
-                >
-                  注销
-                </Menu.Item>
-              </Menu.Group>
-            </Menu>
-          }
-        >
-          <Icon icon="align-center" marginRight={20} size={20} />
-        </Popover>
+        {context.auth.name && (
+          <Popover
+            position={Position.BOTTOM_LEFT}
+            content={
+              <Menu>
+                <Menu.Group>
+                  <Menu.Item
+                    icon="trash"
+                    intent="danger"
+                    onSelect={signouthandler}
+                  >
+                    注销
+                  </Menu.Item>
+                </Menu.Group>
+              </Menu>
+            }
+          >
+            <Icon icon="align-center" marginRight={20} size={20} />
+          </Popover>
+        )}
       </div>
     </header>
   );

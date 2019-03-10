@@ -1,46 +1,32 @@
 import React, { useReducer } from "react";
 
 import GlobalContext from "context/context";
+import { authState } from "context/myblogState";
 import { reducer, LOGIN, LOGOUT } from "context/reducers";
 
 const GlobalState = props => {
-  const initalAuth = {
-    token: "",
-    name: "",
-    avatar: "",
-    bio: "",
-    gender: "",
-    login: () => {},
-    logout: () => {}
+  const initalState = {
+    auth: authState
   };
 
-  const initalState = Object.assign({}, initalAuth);
-  // console.log(initalState);
+  // useEffect(() => {}, []);
 
   const [globalState, dispatch] = useReducer(reducer, initalState);
 
-  const login = payload => {
-    setTimeout(() => {
+  const authAction = {
+    login: payload => {
       dispatch({ type: LOGIN, payload });
-    });
-  };
-
-  const logout = payload => {
-    setTimeout(() => {
+    },
+    logout: payload => {
       dispatch({ type: LOGOUT, payload });
-    });
+    }
   };
 
   return (
     <GlobalContext.Provider
       value={{
-        token: globalState.token,
-        name: globalState.name,
-        avatar: globalState.avatar,
-        bio: globalState.bio,
-        gender: globalState.gender,
-        login: login,
-        logout: logout
+        auth: globalState.auth,
+        authAction: { ...authAction }
       }}
     >
       {props.children}

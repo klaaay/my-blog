@@ -47,6 +47,7 @@ app.use(
 );
 
 // 路由
+require("./routes/authentication")(app);
 require("./routes/signup")(app);
 require("./routes/signin")(app);
 require("./routes/signout")(app);

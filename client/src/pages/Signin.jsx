@@ -22,7 +22,7 @@ const Signin = props => {
 
   useEffect(() => {
     console.log(context);
-  }, []);
+  });
 
   const vistorBtnHandler = () => {
     props.history.push("/home");
@@ -35,15 +35,16 @@ const Signin = props => {
     console.log(values);
     try {
       const res = await axios.post(SIGNIN, values);
-      console.log(res.data);
+      // console.log(res.data);
       asyncToast(res.data);
-      context.login({
+      context.authAction.login({
         token: res.data.token,
         name: res.data.name,
         avatar: res.data.avatar,
         bio: res.data.bio,
         gender: res.data.gender
       });
+      localStorage.setItem("token", res.data.token);
       resetForm();
       setSubmitting(false);
       props.history.push("/home");
