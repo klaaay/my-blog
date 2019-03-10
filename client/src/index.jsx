@@ -18,9 +18,7 @@ class App extends Component {
       <GlobalState>
         <BrowserRouter>
           <React.Fragment>
-            <header>
-              <Head />
-            </header>
+            <Head />
             <main>
               <Switch>
                 <Route exact path="/" component={Signin} />
